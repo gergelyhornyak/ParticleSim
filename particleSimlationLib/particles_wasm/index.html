@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Particle Simulation</title>
+    <style>
+        canvas { background: black; display: block; margin: auto; }
+    </style>
+</head>
+<body>
+    <canvas id="canvas" width="800" height="600"></canvas>
+    <script>
+        let Module2 = {
+            onRuntimeInitialized: function () {
+                const canvas = document.getElementById("canvas");
+                const ctx = canvas.getContext("2d");
+                const NUM_PARTICLES = 100;
+                
+                Module._initParticles();
+                
+                function update() {
+                    Module._updateParticles();
+                    let particlesPtr = Module._getParticles();
+                    let particles = new Float32Array(Module.HEAPF32.buffer, particlesPtr, NUM_PARTICLES * 4);
+                    
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.fillStyle = "white";
+                    
+                    for (let i = 0; i < NUM_PARTICLES; i++) {
+                        let x = particles[i * 4];
+                        let y = particles[i * 4 + 1];
+                        ctx.fillRect(x, y, 2, 2);
+                    }
+                    requestAnimationFrame(update);
+                }
+                update();
+            }
+        };
+    </script>
+    <script src="particles.js"></script>
+</body>
+</html>

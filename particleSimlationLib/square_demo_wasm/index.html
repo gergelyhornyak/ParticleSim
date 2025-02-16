@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moving Square</title>
+</head>
+<body>
+    <h1>Moving Square in WebAssembly</h1>
+    <canvas id="canvas" width="800" height="600" style="border:1px solid black;"></canvas>
+    <script src="moving_square.js"></script>
+    <script>
+        // Start the WebAssembly app once it's loaded
+        Module.onRuntimeInitialized = function() {
+            Module._main();
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editable JavaScript</title>
+</head>
+<body>
+    <h2>Editable JavaScript Code</h2>
+    <p>Edit the JavaScript code below and see it executed in real-time.</p>
+    <button onclick="runCode()">Run Code</button>
+    <pre contenteditable="true" id="codeEditor" style="border:1px solid #000; padding:10px; min-height:100px; background:#f4f4f4;">
+
+console.log('Hello, World!');
+
+try {
+    let oldCanvas = document.getElementById("canvas01");
+    oldCanvas.remove();
+} catch (error) {
+    console.error("No old canvas");
+}
+
+let newCanvas = document.createElement("canvas");
+newCanvas.id = "canvas01";
+newCanvas.width = 400;
+newCanvas.height = 400;
+newCanvas.style.border = "1px solid black";
+document.body.appendChild(newCanvas);
+const ctx = newCanvas.getContext("2d");
+
+let colours = ["pink","yellow","orange","#39FF14"];
+
+let particles = [];
+function init(){
+    for(let i=0; i<20; i++){
+        particles[i] = {x:newCanvas.width/2,y:newCanvas.height/2};
+    }
+}
+
+function update() {
+    ctx.fillStyle = "#000000";
+    ctx.fillRect(0, 0, newCanvas.width, newCanvas.height); // turn off to see traces
+    for(let i=0; i<20; i++){
+        ctx.beginPath();
+        ctx.arc(particles[i].x, particles[i].y, 2, 0, Math.PI * 2);
+        ctx.fillStyle = "yellow";
+        ctx.fill();
+        ctx.closePath();
+        particles[i].x += (Math.random() * 2)-1;
+        particles[i].y += (Math.random() * 2)-1;
+    }
+    
+    requestAnimationFrame(update);
+}
+
+init();
+        
+update();
+
+    </pre>
+    
+    <script>
+        let currentFunction = null;
+
+        function runCode() {
+            let code = document.getElementById("codeEditor").innerText;
+            if (currentFunction) {
+                currentFunction = null; // Remove reference to old function
+            }
+            try {
+                currentFunction = new Function(code);
+                currentFunction();
+            } catch (error) {
+                console.error("Error in script:", error);
+            }
+        }
+    </script>
+</body>
+</html>
